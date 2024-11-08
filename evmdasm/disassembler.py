@@ -32,17 +32,19 @@ class EvmDisassembler(object):
             logger.debug(opcode)
             try:
                 instruction = self._registry.by_opcode[opcode].consume(iter_bytecode)
-                if not len(instruction.operand_bytes)==instruction.length_of_operand:
-                    logger.error("invalid instruction: %s" % instruction.name)
-                    instruction._name = "INVALID_%s" % hex(opcode)
-                    instruction._description = "Invalid operand"
-                    instruction._category = "unknown"
+                # if not len(instruction.operand_bytes)==instruction.length_of_operand:
+                #     logger.error("invalid instruction: %s" % instruction.name)
+                #     instruction._name = "INVALID_%s" % hex(opcode)
+                #     instruction._description = "Invalid operand"
+                #     instruction._category = "unknown"
 
             except KeyError as ke:
-                instruction = self._registry._template_cls(opcode=opcode,
-                                                           name="UNKNOWN_%s" % hex(opcode),
-                                                           description="Invalid opcode",
-                                                           category="unknown")
+                instruction = self._registry.by_opcode[0xfe].consume(iter_bytecode)
+
+                # instruction = self._registry._template_cls(opcode=opcode,
+                #                                            name="UNKNOWN_%s" % hex(opcode),
+                #                                            description="Invalid opcode",
+                #                                            category="unknown")
 
                 if not seen_stop:
                     msg = "error: byte at address %d (%s) is not a valid operator" % (pc, hex(opcode))

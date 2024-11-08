@@ -63,9 +63,8 @@ INSTRUCTIONS = [
     Instruction(opcode=0x41, name='COINBASE', category="blockinfo", gas=2, description="Get the block's beneficiary address.", returns=[T.Address("block.coinbase")]),
     Instruction(opcode=0x42, name='TIMESTAMP', category="blockinfo", gas=2, description="Get the block's timestamp.", returns=[T.Timestamp("block.timestamp")]),
     Instruction(opcode=0x43, name='NUMBER', category="blockinfo", gas=2, description="Get the block's number.", returns=[T.Value("block.number")]),
-    Instruction(opcode=0x44, name='DIFFICULTY', category="blockinfo", gas=2, description="Get the block's difficulty.", returns=[T.Value("block.difficulty")]),
+    Instruction(opcode=0x44, name='PREVRANDAO', category="blockinfo", gas=2, description="Get the block's difficulty.", returns=[T.Value("block.difficulty")]),
     Instruction(opcode=0x45, name='GASLIMIT', category="blockinfo", gas=2, description="Get the block's gas limit.", returns=[T.Gas("block.gaslimit")]),
-    
     Instruction(opcode=0x46, name='CHAINID', category="blockinfo", gas=2, description="Get the chain id.", returns=[T.Gas("chain_id")]),
     Instruction(opcode=0x47, name='SELFBALANCE', category="blockinfo", gas=5, description="Get own balance.", returns=[T.Gas("address(this).balance")]),
     Instruction(opcode=0x48, name='BASEFEE', category="blockinfo", gas=2, description="Get the value of the base fee of the current block.", returns=[T.Gas("block.basefee")]),
@@ -86,7 +85,9 @@ INSTRUCTIONS = [
     Instruction(opcode=0x5a, name='GAS', category="info", gas=2, description="Get the amount of available gas, including the corresponding reduction", returns=[T.Gas("gasleft")]),
     Instruction(opcode=0x5b, name='JUMPDEST', category="label", gas=1, description="Mark a valid destination for jumps."),
 
+
     # Stack Push Operations
+    Instruction(opcode=0x5f, name='PUSH0', category="stack", gas=2, length_of_operand=0x0, description="Place 0 byte item on stack.", returns=[T.Value("item")]),
     Instruction(opcode=0x60, name='PUSH1', category="stack", gas=3, length_of_operand=0x1, description="Place 1 byte item on stack.", returns=[T.Value("item")]),
     Instruction(opcode=0x61, name='PUSH2', category="stack", gas=3, length_of_operand=0x2, description="Place 2-byte item on stack.", returns=[T.Value("item")]),
     Instruction(opcode=0x62, name='PUSH3', category="stack",  gas=3, length_of_operand=0x3, description="Place 3-byte item on stack.", returns=[T.Value("item")]),
@@ -164,9 +165,9 @@ INSTRUCTIONS = [
     Instruction(opcode=0xa4, name='LOG4', category="event", gas=1875, description="Append log record with four topics.", args=[T.MemOffset("start"), T.Length("size"), T.Value("topic1"), T.Value("topic2"), T.Value("topic3"), T.Value("topic4")]),
 
     # unofficial opcodes used for parsing.
-    Instruction(opcode=0xb0, name='UNOFFICIAL_PUSH', category="unofficial", description="unofficial opcodes used for parsing."),
-    Instruction(opcode=0xb1, name='UNOFFICIAL_DUP', category="unofficial", description="unofficial opcodes used for parsing."),
-    Instruction(opcode=0xb2, name='UNOFFICIAL_SWAP', category="unofficial", description="unofficial opcodes used for parsing."),
+    Instruction(opcode=0xb0, name='PUSH0', category="stack", gas=2, length_of_operand=0x0, description="Place 0 byte item on stack.", returns=[T.Value("item")]),
+    Instruction(opcode=0xb1, name='DUP1', category="stack", gas=3, pops=1, pushes=2, description="Duplicate 1st stack item."),
+    Instruction(opcode=0xb2, name='SWAP1', category="stack", gas=3, pops=2, pushes=2, description="Exchange 1st and 2nd stack items."),
 
     # System Operations
     Instruction(opcode=0xf0, name='CREATE', category="system", gas=32000, description="Create a new account with associated code.", args=[T.CallValue("value"), T.MemOffset("offset"), T.Length("size")]),
@@ -179,7 +180,8 @@ INSTRUCTIONS = [
     # Newer opcode
     Instruction(opcode=0xfa, name='STATICCALL', category="system", gas=40, description='Call another contract (or itself) while disallowing any modifications to the state during the call.', args=[T.Gas("gas"), T.Address("address"), T.MemOffset("inOffset"), T.Length("inSize"), T.MemOffset("retOffset"), T.Length("retSize")]),
     Instruction(opcode=0xfd, name='REVERT', category="terminate", gas=0, description='throw an error', args=[T.MemOffset("offset"), T.Length("size")]),
-
+    Instruction(opcode=0xfe, name='INVALID', category="terminate", gas=0, description='invalid opcode'),
+    
     # Halt Execution, Mark for deletion
     Instruction(opcode=0xff, name='SELFDESTRUCT', category="terminate", gas=0, description="Halt execution and register account for later deletion.", args=[T.Address("address")]),
 ]

@@ -39,6 +39,7 @@ class EvmDisassembler(object):
                 #     instruction._category = "unknown"
 
             except KeyError as ke:
+                # We can use the INVALID opcode (0xfe)
                 instruction = self._registry.by_opcode[0xfe].consume(iter_bytecode)
 
                 # instruction = self._registry._template_cls(opcode=opcode,

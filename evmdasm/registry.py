@@ -41,7 +41,7 @@ INSTRUCTIONS = [
 
     # Environmental Information
     Instruction(opcode=0x30, name='ADDRESS', category="envinfo", gas=2, description="Get address of currently executing account.", returns=[T.Address('this.address')]),
-    Instruction(opcode=0x31, name='BALANCE', category="envinfo", gas=20, description="Get balance of the given account.", args=[T.Address("address")], returns=[T.Value("this.balance")]),
+    Instruction(opcode=0x31, name='BALANCE', category="envinfo", gas=100, description="Get balance of the given account.", args=[T.Address("address")], returns=[T.Value("this.balance")]),
     Instruction(opcode=0x32, name='ORIGIN', category="envinfo", gas=2, description="Get execution origination address.", returns=[T.Address("tx.origin")]),
     Instruction(opcode=0x33, name='CALLER', category="envinfo", gas=2, description="Get caller address.This is the address of the account that is directly responsible for this execution.", returns=[T.Address("msg.sender")]),
     Instruction(opcode=0x34, name='CALLVALUE', category="envinfo", gas=2, description="Get deposited value by the instruction/transaction responsible for this execution.", returns=[T.CallValue("msg.value")]),
@@ -51,11 +51,11 @@ INSTRUCTIONS = [
     Instruction(opcode=0x38, name='CODESIZE', category="envinfo", gas=2, description="Get size of code running in current environment.", returns=[T.Length("codesize")]),
     Instruction(opcode=0x39, name='CODECOPY', category="envinfo", gas=3, description="Copy code running in current environment to memory.", args=[T.MemOffset("memOffset"), T.MemOffset("codeOffset"), T.Length("length")]),
     Instruction(opcode=0x3a, name='GASPRICE', category="envinfo", gas=2, description="Get price of gas in current environment.", returns=[T.Gas("tx.gasprice")]),
-    Instruction(opcode=0x3b, name='EXTCODESIZE', category="envinfo", gas=20, description="Get size of an account's code.", args=[T.Address('address')], returns=["extcodesize"]),
-    Instruction(opcode=0x3c, name='EXTCODECOPY', category="envinfo", gas=20, description="Copy an account's code to memory.", args=[T.Address("address"), T.MemOffset("memOffset"), T.MemOffset("codeOffset"), T.Length("length")]),
+    Instruction(opcode=0x3b, name='EXTCODESIZE', category="envinfo", gas=100, description="Get size of an account's code.", args=[T.Address('address')], returns=["extcodesize"]),
+    Instruction(opcode=0x3c, name='EXTCODECOPY', category="envinfo", gas=100, description="Copy an account's code to memory.", args=[T.Address("address"), T.MemOffset("memOffset"), T.MemOffset("codeOffset"), T.Length("length")]),
     Instruction(opcode=0x3d, name='RETURNDATASIZE', category="envinfo", gas=2, description="Push the size of the return data buffer onto the stack.", returns=["returndatasize"]),
     Instruction(opcode=0x3e, name='RETURNDATACOPY', category="envinfo", gas=3, description="Copy data from the return data buffer.", args=[T.MemOffset("memOffset"), T.MemOffset("dataOffset"), T.Length("length")]),
-    Instruction(opcode=0x3f, name='EXTCODEHASH', category="envinfo", gas=400, fork="constantinople", description="<TBD> - Constantinople", args=[T.Address("address")]),
+    Instruction(opcode=0x3f, name='EXTCODEHASH', category="envinfo", gas=100, fork="constantinople", description="Get hash of an account's code.", args=[T.Address("address")]),
 
 
     # Block Information
@@ -76,8 +76,8 @@ INSTRUCTIONS = [
     Instruction(opcode=0x51, name='MLOAD', category="memory", gas=3, description="Load word from memory.", args=[T.MemOffset("offset")]),
     Instruction(opcode=0x52, name='MSTORE', category="memory", gas=3, description="Save word to memory.", args=[T.MemOffset("offset"),T.Word("value")]),
     Instruction(opcode=0x53, name='MSTORE8', category="memory", gas=3, description="Save byte to memory.", args=[T.MemOffset("offset"),T.Byte("value")]),
-    Instruction(opcode=0x54, name='SLOAD', category="storage", gas=50, description="Load word from storage.", args=[T.MemOffset("loc")], returns=["value"]),
-    Instruction(opcode=0x55, name='SSTORE', category="storage", gas=0, description="Save word to storage.", args=[T.MemOffset("loc"), T.Word("value")]),
+    Instruction(opcode=0x54, name='SLOAD', category="storage", gas=100, description="Load word from storage.", args=[T.MemOffset("loc")], returns=["value"]),
+    Instruction(opcode=0x55, name='SSTORE', category="storage", gas=100, description="Save word to storage.", args=[T.MemOffset("loc"), T.Word("value")]),
     Instruction(opcode=0x56, name='JUMP', category="controlflow", gas=8, description="Alter the program counter.", args=[T.Label("evm.pc")]),
     Instruction(opcode=0x57, name='JUMPI', category="controlflow", gas=10, description="Conditionally alter the program counter.", args=[T.Label("evm.pc"), T.Bool("condition")]),
     Instruction(opcode=0x58, name='PC', category="info", gas=2, description="Get the value of the program counter prior to the increment.", returns=[T.Label("evm.pc")]),
@@ -171,19 +171,19 @@ INSTRUCTIONS = [
 
     # System Operations
     Instruction(opcode=0xf0, name='CREATE', category="system", gas=32000, description="Create a new account with associated code.", args=[T.CallValue("value"), T.MemOffset("offset"), T.Length("size")]),
-    Instruction(opcode=0xf1, name='CALL', category="system", gas=40, description="Message-call into an account.", args=[T.Gas("gas"), T.Address("address"), T.CallValue("value"), T.MemOffset("inOffset"), T.Length("inSize"), T.MemOffset("retOffset"), T.Length("retSize")]),
-    Instruction(opcode=0xf2, name='CALLCODE', category="system", gas=40, description="Message-call into this account with alternative account's code.", args=[T.Gas("gas"), T.Address("address"), T.CallValue("value"), T.MemOffset("inOffset"), T.Length("inSize"), T.MemOffset("retOffset"), T.Length("retSize")]),
+    Instruction(opcode=0xf1, name='CALL', category="system", gas=100, description="Message-call into an account.", args=[T.Gas("gas"), T.Address("address"), T.CallValue("value"), T.MemOffset("inOffset"), T.Length("inSize"), T.MemOffset("retOffset"), T.Length("retSize")]),
+    Instruction(opcode=0xf2, name='CALLCODE', category="system", gas=100, description="Message-call into this account with alternative account's code.", args=[T.Gas("gas"), T.Address("address"), T.CallValue("value"), T.MemOffset("inOffset"), T.Length("inSize"), T.MemOffset("retOffset"), T.Length("retSize")]),
     Instruction(opcode=0xf3, name='RETURN', category="terminate", gas=0, description="Halt execution returning output data.", args=[T.MemOffset("offset"), T.Length("size")]),
-    Instruction(opcode=0xf4, name='DELEGATECALL', category="system", gas=40, description="Similar to CALLCODE except that it propagates the sender and value from the parent scope to the child scope", args=[T.Gas("gas"), T.Address("address"), T.MemOffset("inOffset"), T.Length("inSize"), T.MemOffset("retOffset"), T.Length("retSize")]),
+    Instruction(opcode=0xf4, name='DELEGATECALL', category="system", gas=100, description="Similar to CALLCODE except that it propagates the sender and value from the parent scope to the child scope", args=[T.Gas("gas"), T.Address("address"), T.MemOffset("inOffset"), T.Length("inSize"), T.MemOffset("retOffset"), T.Length("retSize")]),
     Instruction(opcode=0xf5, name='CREATE2', category="system", gas=32000, fork="constantinople", description="Create a new account with associated code. (Constantinople)", args=[T.Value("endowment"), T.MemOffset("offset"), T.Length("size"), T.Value("salt")]),
 
     # Newer opcode
-    Instruction(opcode=0xfa, name='STATICCALL', category="system", gas=40, description='Call another contract (or itself) while disallowing any modifications to the state during the call.', args=[T.Gas("gas"), T.Address("address"), T.MemOffset("inOffset"), T.Length("inSize"), T.MemOffset("retOffset"), T.Length("retSize")]),
+    Instruction(opcode=0xfa, name='STATICCALL', category="system", gas=100, description='Call another contract (or itself) while disallowing any modifications to the state during the call.', args=[T.Gas("gas"), T.Address("address"), T.MemOffset("inOffset"), T.Length("inSize"), T.MemOffset("retOffset"), T.Length("retSize")]),
     Instruction(opcode=0xfd, name='REVERT', category="terminate", gas=0, description='throw an error', args=[T.MemOffset("offset"), T.Length("size")]),
     Instruction(opcode=0xfe, name='INVALID', category="terminate", gas=0, description='invalid opcode'),
     
     # Halt Execution, Mark for deletion
-    Instruction(opcode=0xff, name='SELFDESTRUCT', category="terminate", gas=0, description="Halt execution and register account for later deletion.", args=[T.Address("address")]),
+    Instruction(opcode=0xff, name='SELFDESTRUCT', category="terminate", gas=5000, description="Halt execution and register account for later deletion.", args=[T.Address("address")]),
 ]
 
 '''
